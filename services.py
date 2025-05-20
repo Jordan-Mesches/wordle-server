@@ -1,9 +1,8 @@
 import datetime
 from dataclasses import dataclass
 from typing import Optional
-
-import requests
 from pydantic import BaseModel, computed_field
+from security import safe_requests
 
 
 class ValidWordChecker:
@@ -44,7 +43,7 @@ class WordleAnswer:
 
 def get_wordle_answer() -> WordleAnswer:
     current_date = datetime.datetime.now()
-    response = requests.get(f"https://www.nytimes.com/svc/wordle/v2/{current_date.strftime("%Y-%m-%d")}.json")
+    response = safe_requests.get(f"https://www.nytimes.com/svc/wordle/v2/{current_date.strftime("%Y-%m-%d")}.json")
 
     return WordleAnswer(
         word=response.json()["solution"],
